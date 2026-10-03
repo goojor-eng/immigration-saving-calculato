@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>移民家庭資產與避稅帳戶計算機 | Immigration Saving Account Calculator</title>
+  <!-- 引入 Tailwind CSS 與 Chart.js 繪圖庫 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+  <!-- 頂部頁首導航 -->
+  <header class="bg-slate-900 text-white shadow-md">
+    <div class="max-w-4xl mx-auto px-4 py-6">
+      <div class="inline-block bg-indigo-600 text-indigo-100 text-xs px-2.5 py-1 rounded-full font-semibold mb-2">美國新移民家庭財務指南</div>
+      <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Immigration Saving Account Calculator</h1>
+      <p class="text-slate-300 text-sm mt-1">529 教育跨世代金庫 × HSA 三全免秘密退休金 × 避稅水流模型</p>
+    </div>
+  </header>
+
+  <!-- 頂端 Tab 分頁切換列 -->
+  <nav class="max-w-4xl mx-auto px-4 mt-6">
+    <div class="flex border-b border-slate-200 bg-white rounded-t-xl px-2 pt-2 gap-2 shadow-sm overflow-x-auto">
+      <button onclick="switchTab('tab-529')" id="btn-529" 
+        class="tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">
+        🎓 529 教育與傳承金庫
+      </button>
+      <button onclick="switchTab('tab-hsa')" id="btn-hsa" 
+        class="tab-btn px-4 py-2.5 font-medium text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap">
+        🏥 HSA 隱藏退休金庫 (三全免)
+      </button>
+      <button onclick="switchTab('tab-waterfall')" id="btn-waterfall" 
+        class="tab-btn px-4 py-2.5 font-medium text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap">
+        🌊 避稅水流模型 (The Waterfall)
+      </button>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto px-4 py-6 space-y-8">
+
+    <!-- ==================== TAB 1: 529 教育基金模組 ==================== -->
+    <div id="tab-529" class="tab-content block space-y-6">
+      
+      <!-- 控制器卡片 -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+          <span>⚙️</span> 529 參數設定（拖動滑桿即時計算）
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">初始存入總本金 (USD)</label>
+              <span id="txt529Initial" class="font-bold text-indigo-600">$140,000</span>
+            </div>
+            <input type="range" id="input529Initial" min="50000" max="300000" step="10000" value="140000" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">夫妻兩人各7萬可申報 Form 709 採用 5 年 Superfunding 免贈與稅</p>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">小孩目前年齡</label>
+              <span id="txt529Age" class="font-bold text-indigo-600">11 歲</span>
+            </div>
+            <input type="range" id="input529Age" min="0" max="17" step="1" value="11" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">預設 18 歲入學，距大學還有 <span id="txt529Years" class="font-semibold text-slate-600">7</span> 年複利期</p>
+          </div>
+
+          <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">預計每年提領學雜食宿 (18-22歲 共4年)</label>
+              <span id="txt529Tuition" class="font-bold text-indigo-600 text-base">$38,000 / 年</span>
+            </div>
+            <input type="range" id="input529Tuition" min="15000" max="100000" step="1000" value="38000" class="w-full accent-indigo-600 cursor-pointer">
+            <div class="flex justify-between text-xs text-slate-500 mt-2 px-1">
+              <span class="text-emerald-600 font-medium">🏫 頂尖州立公立 (約 $3.5萬)</span>
+              <span class="text-amber-600 font-medium">🏛️ 一般私立/外州公立 (約 $6.5萬)</span>
+              <span class="text-rose-600 font-medium">🎓 常春藤/頂尖私立 ($9萬+)</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-2">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">年化投資回報率 (%)</label>
+              <span id="txt529Rate" class="font-bold text-indigo-600">7.0%</span>
+            </div>
+            <input type="range" id="input529Rate" min="4.0" max="10.0" step="0.5" value="7.0" class="w-full accent-indigo-600 cursor-pointer">
+            <div class="flex justify-between text-xs text-slate-400 mt-1">
+              <span>🛡️ 保守 (5%)</span>
+              <span class="text-indigo-600 font-semibold">⚖️ 平衡指數配置 (預設 7%)</span>
+              <span>🚀 積極成長 (9%)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 統計摘要卡片 -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-medium">18 歲入學時累積總資產</div>
+          <div id="res529College" class="text-2xl font-extrabold text-slate-800 mt-2">$224,809</div>
+          <div class="text-xs text-slate-400 mt-1">大學入學前增長</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-medium">22 歲大學畢業時餘額</div>
+          <div id="res529Grad" class="text-2xl font-extrabold text-blue-600 mt-2">$78,150</div>
+          <div id="txt529GradNote" class="text-xs text-slate-400 mt-1">26～30 歲分 5 年轉 $7k (共$35k)</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-indigo-100 shadow-sm text-center bg-gradient-to-b from-white to-indigo-50/40">
+          <div id="txt529GrandchildLabel" class="text-xs text-indigo-600 font-semibold">轉完 IRA 後孫輩金庫</div>
+          <div id="res529Grandchild" class="text-2xl font-extrabold text-emerald-600 mt-2">$97,180</div>
+          <div class="text-xs text-slate-400 mt-1">529 內免稅持續複利</div>
+        </div>
+      </section>
+
+      <!-- 圖表 -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-bold text-slate-900">📈 529 帳戶完整生命週期軌跡 (嚴謹分 5 年扣 IRA)</h3>
+          <span class="text-xs text-slate-400">單位: USD</span>
+        </div>
+        <div class="relative h-72 md:h-80 w-full">
+          <canvas id="chart529"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 2: HSA 隱藏退休金模組 ==================== -->
+    <div id="tab-hsa" class="tab-content hidden space-y-6">
+      
+      <!-- HSA 核心觀念解析 -->
+      <section class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-6 rounded-2xl shadow-sm">
+        <span class="bg-emerald-700 text-emerald-100 text-xs px-2.5 py-1 rounded-full font-semibold">全美唯一三全免神卡</span>
+        <h2 class="text-xl md:text-2xl font-bold mt-2">HSA 不只是醫藥費卡，更是終極免稅投資金庫</h2>
+        <p class="text-emerald-100 text-xs md:text-sm mt-2 leading-relaxed">
+          <strong>收據自費留存法（Shoebox Strategy）</strong>：平時看醫生自己刷信用卡付掉並「終身保留發票/收據」，HSA 裡面的錢全額買入 S&P 500。幾十年免稅複利成長到 65 歲，隨時拿舊收據免稅報銷，65 歲後任意領出更是等同於 Traditional IRA！
+        </p>
+      </section>
+
+      <!-- 控制器卡片 -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+          <span>⚙️</span> HSA 複利試算設定
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">目前年齡</label>
+              <span id="txtHsaAge" class="font-bold text-emerald-600">41 歲</span>
+            </div>
+            <input type="range" id="inputHsaAge" min="20" max="60" step="1" value="41" class="w-full accent-emerald-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">計算複利至 65 歲（共複利 <span id="txtHsaYears" class="font-semibold text-slate-600">24</span> 年）</p>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">每年投入額 (USD)</label>
+              <span id="txtHsaContrib" class="font-bold text-emerald-600">$8,550 / 年</span>
+            </div>
+            <input type="range" id="inputHsaContrib" min="4000" max="10000" step="250" value="8550" class="w-full accent-emerald-600 cursor-pointer">
+            <div class="flex justify-between text-xs text-slate-400 mt-1">
+              <span>個人上限 (~$4,300)</span>
+              <span class="text-emerald-600 font-semibold">家庭上限 (~$8,550)</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-2">
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">投資標的年化回報率 (%)</label>
+              <span id="txtHsaRate" class="font-bold text-emerald-600">8.0%</span>
+            </div>
+            <input type="range" id="inputHsaRate" min="4.0" max="10.0" step="0.5" value="8.0" class="w-full accent-emerald-600 cursor-pointer">
+            <div class="flex justify-between text-xs text-slate-400 mt-1">
+              <span>保守 (5%)</span>
+              <span class="text-emerald-600 font-semibold">S&P 500 指數歷史平均 (約 8%)</span>
+              <span>積極成長 (10%)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 統計對比卡片 -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-medium">累積總存入本金</div>
+          <div id="resHsaPrincipal" class="text-2xl font-extrabold text-slate-800 mt-2">$205,200</div>
+          <div class="text-xs text-slate-400 mt-1">本金全額抵扣當年度薪資所得</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-emerald-100 shadow-sm text-center bg-gradient-to-b from-white to-emerald-50/40">
+          <div class="text-xs text-emerald-700 font-semibold">65 歲 HSA 帳戶終值 (三全免)</div>
+          <div id="resHsaTotal" class="text-2xl font-extrabold text-emerald-600 mt-2">$626,890</div>
+          <div class="text-xs text-emerald-600 mt-1">一毛所得稅與資本利得稅都不用繳</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-rose-100 shadow-sm text-center bg-gradient-to-b from-white to-rose-50/30">
+          <div class="text-xs text-rose-600 font-semibold">若放在一般券商被吃掉的稅</div>
+          <div id="resHsaTaxSaved" class="text-2xl font-extrabold text-rose-600 mt-2">$94,000+</div>
+          <div class="text-xs text-slate-400 mt-1">省下的資本利得與股利稅金</div>
+        </div>
+      </section>
+
+      <!-- HSA 成長走勢圖 -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-bold text-slate-900">📈 HSA 終身免稅複利滾存軌跡 (至 65 歲)</h3>
+          <span class="text-xs text-slate-400">單位: USD</span>
+        </div>
+        <div class="relative h-72 md:h-80 w-full">
+          <canvas id="chartHsa"></canvas>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 3: 避稅水流模型 (The Waterfall) ==================== -->
+    <div id="tab-waterfall" class="tab-content hidden space-y-6">
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <h2 class="text-xl font-bold text-slate-900 mb-2">🌊 美國移民家庭入金優先級（The Waterfall Model）</h2>
+        <p class="text-sm text-slate-500 mb-6">每年家庭能存下的資金，應該照以下「稅務防禦力最高」的順序逐層填滿：</p>
+
+        <div class="space-y-4">
+          <div class="p-4 bg-emerald-50 rounded-xl border border-emerald-200 flex items-start gap-4">
+            <span class="bg-emerald-600 text-white font-bold text-sm w-7 h-7 rounded-full flex items-center justify-center shrink-0">1</span>
+            <div>
+              <h4 class="font-bold text-emerald-900 text-sm">先吃滿公司 401(k) Match（100% 現賺無風險）</h4>
+              <p class="text-xs text-emerald-700 mt-1">例如公司 Match 5%，你放 5% 公司送 5%，這是市場上唯一的免費午餐，優先順序最高。</p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-teal-50 rounded-xl border border-teal-200 flex items-start gap-4">
+            <span class="bg-teal-600 text-white font-bold text-sm w-7 h-7 rounded-full flex items-center justify-center shrink-0">2</span>
+            <div>
+              <h4 class="font-bold text-teal-900 text-sm">存滿 HSA（全美唯一三全免）</h4>
+              <p class="text-xs text-teal-700 mt-1">家庭每年約 $8,550。稅前抵扣、增長免稅、醫療領出免稅。買入大盤指數，醫療開銷自費保留收據，等退休提領。</p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-indigo-50 rounded-xl border border-indigo-200 flex items-start gap-4">
+            <span class="bg-indigo-600 text-white font-bold text-sm w-7 h-7 rounded-full flex items-center justify-center shrink-0">3</span>
+            <div>
+              <h4 class="font-bold text-indigo-900 text-sm">夫妻雙人 Backdoor Roth IRA（終身免稅）</h4>
+              <p class="text-xs text-indigo-700 mt-1">收入超標不可怕，透過後門（Non-deductible Traditional IRA 轉 Roth）夫妻每年可各存 $7,000（共$14,000），未來增長一輩子免稅。</p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-blue-50 rounded-xl border border-blue-200 flex items-start gap-4">
+            <span class="bg-blue-600 text-white font-bold text-sm w-7 h-7 rounded-full flex items-center justify-center shrink-0">4</span>
+            <div>
+              <h4 class="font-bold text-blue-900 text-sm">填滿 401(k) 自身上限 ($23,500)</h4>
+              <p class="text-xs text-blue-700 mt-1">針對高所得級距（24%~37%），直接把 W-2 應納稅額壓低，延稅複利。</p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-amber-50 rounded-xl border border-amber-200 flex items-start gap-4">
+            <span class="bg-amber-600 text-white font-bold text-sm w-7 h-7 rounded-full flex items-center justify-center shrink-0">5</span>
+            <div>
+              <h4 class="font-bold text-amber-900 text-sm">配置 529 教育跨世代金庫</h4>
+              <p class="text-xs text-amber-700 mt-1">兼具教育專用與長輩持有 100% 離婚債務防火牆，畢業後還能轉 $35k Roth IRA 與無痛移轉孫輩。</p>
+            </div>
+          </div>
+
+          <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 flex items-start gap-4">
+            <span class="bg-slate-600 text-white font-bold text-sm w-7 h-7 rounded-full flex items-center justify-center shrink-0">6</span>
+            <div>
+              <h4 class="font-bold text-slate-800 text-sm">溢出資金：一般券商戶 (Taxable Brokerage)</h4>
+              <p class="text-xs text-slate-600 mt-1">彈性最高，無 59.5 歲限制，負責房產頭期款、創業、FIRE 提早退休支應。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ==================== 通用留言討論板 ==================== -->
+    <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+      <h3 class="font-bold text-slate-900 text-lg mb-2">💬 移民朋友交流討論區</h3>
+      <p class="text-xs text-slate-500 mb-6">歡迎在下方分享你的年期配置、費用考量或稅務疑問（免登入直接留言）：</p>
+
+      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-6 space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">暱稱 / 稱呼</label>
+          <input type="text" id="commentAuthor" placeholder="例如：德州老劉、加州轉德州 Kevin" class="w-full text-sm px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">留言內容</label>
+          <textarea id="commentContent" rows="3" placeholder="請輸入您的看法或疑問..." class="w-full text-sm px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+        <div class="flex justify-between items-center pt-1">
+          <span class="text-xs text-slate-400">💡 提示：點擊送出即可發布在下方討論串</span>
+          <button onclick="postComment()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">送出留言</button>
+        </div>
+      </div>
+
+      <div id="commentsList" class="space-y-3">
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-semibold text-slate-800 text-sm">Austin 老劉</span>
+            <span class="text-xs text-slate-400">昨天</span>
+          </div>
+          <p class="text-sm text-slate-600">原來德州居民買 Utah my529 費用率差這麼多！以前大家都直接買本土的，這張 20 年費用對比真的很有說服力。</p>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
+          <div class="flex justify-between items-center mb-1">
+            <span class="font-semibold text-slate-800 text-sm">加州轉德州 Kevin</span>
+            <span class="text-xs text-slate-400">今天 10:15</span>
+          </div>
+          <p class="text-sm text-slate-600">請問夫妻各自存 7 萬做 5 年 Superfunding，當年度 Form 709 報稅時會很繁瑣嗎？期待解答！</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="text-center py-8 text-xs text-slate-400">
+    本工具僅供教育與模擬參考，實際稅務規劃請諮詢合格之美國註冊會計師 (CPA) 或理財顧問 (CFP)。
+  </footer>
+
+  <!-- ==================== 前端 JavaScript 引擎 ==================== -->
+  <script>
+    const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+    // Tab 切換控制
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = 'tab-btn px-4 py-2.5 font-medium text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap';
+      });
+
+      document.getElementById(tabId).classList.remove('hidden');
+      document.getElementById(tabId).classList.add('block');
+
+      const activeBtn = document.getElementById('btn-' + tabId.replace('tab-', ''));
+      activeBtn.className = 'tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap';
+
+      // 切換後重繪圖表以適應尺寸
+      if (tabId === 'tab-529' && chart529) chart529.resize();
+      if (tabId === 'tab-hsa' && chartHsa) chartHsa.resize();
+    }
+
+    // ---------------- 529 計算模組 ----------------
+    const el529Initial = document.getElementById('input529Initial');
+    const el529Age = document.getElementById('input529Age');
+    const el529Tuition = document.getElementById('input529Tuition');
+    const el529Rate = document.getElementById('input529Rate');
+
+    const txt529Initial = document.getElementById('txt529Initial');
+    const txt529Age = document.getElementById('txt529Age');
+    const txt529Tuition = document.getElementById('txt529Tuition');
+    const txt529Rate = document.getElementById('txt529Rate');
+    const txt529Years = document.getElementById('txt529Years');
+
+    const res529College = document.getElementById('res529College');
+    const res529Grad = document.getElementById('res529Grad');
+    const res529Grandchild = document.getElementById('res529Grandchild');
+    const txt529GradNote = document.getElementById('txt529GradNote');
+    const txt529GrandchildLabel = document.getElementById('txt529GrandchildLabel');
+
+    let chart529 = null;
+
+    function calc529() {
+      const initial = parseFloat(el529Initial.value);
+      const age = parseInt(el529Age.value);
+      const tuition = parseFloat(el529Tuition.value);
+      const rate = parseFloat(el529Rate.value) / 100;
+
+      txt529Initial.innerText = fmt.format(initial);
+      txt529Age.innerText = `${age} 歲`;
+      txt529Tuition.innerText = `${fmt.format(tuition)} / 年`;
+      txt529Rate.innerText = `${(rate * 100).toFixed(1)}%`;
+      txt529Years.innerText = Math.max(0, 18 - age);
+
+      const labels = [];
+      const data = [];
+      let balance = initial;
+
+      const iraStartAge = Math.max(22, age + 15);
+      const iraEndAge = iraStartAge + 5;
+      const targetAge = Math.max(34, iraEndAge + 7);
+
+      let balanceAt18 = 0;
+      let balanceAtGrad = 0;
+
+      for (let currAge = age; currAge <= targetAge; currAge++) {
+        labels.push(`${currAge} 歲`);
+
+        if (currAge > age) {
+          if (currAge <= 18) {
+            balance = balance * (1 + rate);
+          } else if (currAge <= 22) {
+            balance = Math.max(0, balance - tuition) * (1 + rate);
+          } else {
+            if (currAge > iraStartAge && currAge <= iraEndAge) {
+              balance = Math.max(0, balance - 7000);
+            }
+            balance = balance * (1 + rate);
+          }
+        }
+
+        data.push(Math.round(balance));
+
+        if (currAge === 18) balanceAt18 = balance;
+        if (currAge === 22) balanceAtGrad = balance;
+      }
+
+      res529College.innerText = fmt.format(balanceAt18);
+      res529Grad.innerText = fmt.format(balanceAtGrad);
+      if (txt529GradNote) txt529GradNote.innerText = `${iraStartAge}～${iraEndAge} 歲分 5 年每年轉 $7k (共$35k)`;
+      res529Grandchild.innerText = fmt.format(balance);
+      if (txt529GrandchildLabel) txt529GrandchildLabel.innerText = `孩子 ${targetAge} 歲時傳承金庫`;
+
+      render529Chart(labels, data);
+    }
+
+    function render529Chart(labels, data) {
+      if (chart529) {
+        chart529.data.labels = labels;
+        chart529.data.datasets[0].data = data;
+        chart529.update();
+        return;
+      }
+      const ctx = document.getElementById('chart529').getContext('2d');
+      chart529 = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '529 帳戶資產淨值',
+            data: data,
+            borderColor: '#4f46e5',
+            backgroundColor: 'rgba(79, 70, 229, 0.08)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.25,
+            pointRadius: 2.5
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { ticks: { callback: v => '$' + (v / 1000) + 'k' }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // ---------------- HSA 計算模組 ----------------
+    const elHsaAge = document.getElementById('inputHsaAge');
+    const elHsaContrib = document.getElementById('inputHsaContrib');
+    const elHsaRate = document.getElementById('inputHsaRate');
+
+    const txtHsaAge = document.getElementById('txtHsaAge');
+    const txtHsaContrib = document.getElementById('txtHsaContrib');
+    const txtHsaRate = document.getElementById('txtHsaRate');
+    const txtHsaYears = document.getElementById('txtHsaYears');
+
+    const resHsaPrincipal = document.getElementById('resHsaPrincipal');
+    const resHsaTotal = document.getElementById('resHsaTotal');
+    const resHsaTaxSaved = document.getElementById('resHsaTaxSaved');
+
+    let chartHsa = null;
+
+    function calcHsa() {
+      const age = parseInt(elHsaAge.value);
+      const contrib = parseFloat(elHsaContrib.value);
+      const rate = parseFloat(elHsaRate.value) / 100;
+
+      const years = Math.max(1, 65 - age);
+      txtHsaAge.innerText = `${age} 歲`;
+      txtHsaContrib.innerText = `${fmt.format(contrib)} / 年`;
+      txtHsaRate.innerText = `${(rate * 100).toFixed(1)}%`;
+      txtHsaYears.innerText = years;
+
+      const labels = [];
+      const hsaData = [];
+      const principalData = [];
+
+      let currentHsa = 0;
+      let currentPrincipal = 0;
+
+      for (let currAge = age; currAge <= 65; currAge++) {
+        labels.push(`${currAge} 歲`);
+        if (currAge > age) {
+          currentHsa = (currentHsa + contrib) * (1 + rate);
+          currentPrincipal += contrib;
+        }
+        hsaData.push(Math.round(currentHsa));
+        principalData.push(Math.round(currentPrincipal));
+      }
+
+      resHsaPrincipal.innerText = fmt.format(currentPrincipal);
+      resHsaTotal.innerText = fmt.format(currentHsa);
+
+      // 假設一般券商戶在資本利得與股利綜合稅負下每年摩擦 1.5%
+      const taxableRate = Math.max(0, rate - 0.015);
+      let taxableVal = 0;
+      for (let i = 0; i < years; i++) {
+        taxableVal = (taxableVal + contrib) * (1 + taxableRate);
+      }
+      const taxSaved = Math.max(0, currentHsa - taxableVal);
+      resHsaTaxSaved.innerText = fmt.format(taxSaved);
+
+      renderHsaChart(labels, hsaData, principalData);
+    }
+
+    function renderHsaChart(labels, hsaData, principalData) {
+      if (chartHsa) {
+        chartHsa.data.labels = labels;
+        chartHsa.data.datasets[0].data = hsaData;
+        chartHsa.data.datasets[1].data = principalData;
+        chartHsa.update();
+        return;
+      }
+      const ctx = document.getElementById('chartHsa').getContext('2d');
+      chartHsa = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'HSA 三全免終值',
+              data: hsaData,
+              borderColor: '#059669',
+              backgroundColor: 'rgba(5, 150, 105, 0.08)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.25
+            },
+            {
+              label: '累積本金',
+              data: principalData,
+              borderColor: '#94a3b8',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'top' },
+            tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt.format(ctx.raw)}` } }
+          },
+          scales: {
+            y: { ticks: { callback: v => '$' + (v / 1000) + 'k' }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // 留言板原生發布
+    function postComment() {
+      const author = document.getElementById('commentAuthor').value.trim() || '熱心讀者';
+      const content = document.getElementById('commentContent').value.trim();
+      if (!content) {
+        alert('請輸入留言內容！');
+        return;
+      }
+
+      const list = document.getElementById('commentsList');
+      const newCard = document.createElement('div');
+      newCard.className = 'p-3 bg-indigo-50/50 rounded-lg border border-indigo-100';
+      newCard.innerHTML = `
+        <div class="flex justify-between items-center mb-1">
+          <span class="font-semibold text-indigo-900 text-sm">${author}</span>
+          <span class="text-xs text-indigo-400">剛剛</span>
+        </div>
+        <p class="text-sm text-slate-700">${content}</p>
+      `;
+      list.prepend(newCard);
+
+      document.getElementById('commentContent').value = '';
+      alert('留言成功發布！');
+    }
+
+    // 監聽所有滑桿事件
+    [el529Initial, el529Age, el529Tuition, el529Rate].forEach(el => el.addEventListener('input', calc529));
+    [elHsaAge, elHsaContrib, elHsaRate].forEach(el => el.addEventListener('input', calcHsa));
+
+    // 頁面初始化
+    calc529();
+    calcHsa();
+  </script>
+</body>
+</html>
