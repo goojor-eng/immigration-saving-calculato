@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>移民家庭資產與避稅帳戶計算機 | Immigration Saving Account Calculator</title>
-  <!-- 引入 Tailwind CSS 與 Chart.js 繪圖庫 -->
+  <!-- 引入 Tailwind CSS 與 Chart.js -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -15,24 +15,28 @@
     <div class="max-w-4xl mx-auto px-4 py-6">
       <div class="inline-block bg-indigo-600 text-indigo-100 text-xs px-2.5 py-1 rounded-full font-semibold mb-2">美國新移民家庭財務指南</div>
       <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Immigration Saving Account Calculator</h1>
-      <p class="text-slate-300 text-sm mt-1">529 教育跨世代金庫 × HSA 三全免秘密退休金 × 避稅水流模型</p>
+      <p class="text-slate-300 text-sm mt-1">529 教育傳承 × HSA 三全免 × Social Security & 401(k) × 避稅水流模型</p>
     </div>
   </header>
 
-  <!-- 頂端 Tab 分頁切換列 -->
+  <!-- 頂端 Tab 分頁導覽列 -->
   <nav class="max-w-4xl mx-auto px-4 mt-6">
     <div class="flex border-b border-slate-200 bg-white rounded-t-xl px-2 pt-2 gap-2 shadow-sm overflow-x-auto">
       <button onclick="switchTab('tab-529')" id="btn-529" 
         class="tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">
-        🎓 529 教育與傳承金庫
+        🎓 529 教育與傳承
       </button>
       <button onclick="switchTab('tab-hsa')" id="btn-hsa" 
         class="tab-btn px-4 py-2.5 font-medium text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap">
-        🏥 HSA 隱藏退休金庫 (三全免)
+        🏥 HSA 隱藏退休金
+      </button>
+      <button onclick="switchTab('tab-retirement')" id="btn-retirement" 
+        class="tab-btn px-4 py-2.5 font-medium text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap">
+        👴 社安金 & 401(k) 退休
       </button>
       <button onclick="switchTab('tab-waterfall')" id="btn-waterfall" 
         class="tab-btn px-4 py-2.5 font-medium text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap">
-        🌊 避稅水流模型 (The Waterfall)
+        🌊 避稅水流模型
       </button>
     </div>
   </nav>
@@ -41,13 +45,10 @@
 
     <!-- ==================== TAB 1: 529 教育基金模組 ==================== -->
     <div id="tab-529" class="tab-content block space-y-6">
-      
-      <!-- 控制器卡片 -->
       <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
           <span>⚙️</span> 529 參數設定（拖動滑桿即時計算）
         </h2>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div class="flex justify-between items-center mb-1">
@@ -57,7 +58,6 @@
             <input type="range" id="input529Initial" min="50000" max="300000" step="10000" value="140000" class="w-full accent-indigo-600 cursor-pointer">
             <p class="text-xs text-slate-400 mt-1">夫妻兩人各7萬可申報 Form 709 採用 5 年 Superfunding 免贈與稅</p>
           </div>
-
           <div>
             <div class="flex justify-between items-center mb-1">
               <label class="text-sm font-medium text-slate-700">小孩目前年齡</label>
@@ -66,7 +66,6 @@
             <input type="range" id="input529Age" min="0" max="17" step="1" value="11" class="w-full accent-indigo-600 cursor-pointer">
             <p class="text-xs text-slate-400 mt-1">預設 18 歲入學，距大學還有 <span id="txt529Years" class="font-semibold text-slate-600">7</span> 年複利期</p>
           </div>
-
           <div class="md:col-span-2 bg-slate-50 p-4 rounded-xl border border-slate-100">
             <div class="flex justify-between items-center mb-1">
               <label class="text-sm font-medium text-slate-700">預計每年提領學雜食宿 (18-22歲 共4年)</label>
@@ -75,11 +74,10 @@
             <input type="range" id="input529Tuition" min="15000" max="100000" step="1000" value="38000" class="w-full accent-indigo-600 cursor-pointer">
             <div class="flex justify-between text-xs text-slate-500 mt-2 px-1">
               <span class="text-emerald-600 font-medium">🏫 頂尖州立公立 (約 $3.5萬)</span>
-              <span class="text-amber-600 font-medium">🏛️ 一般私立/外州公立 (約 $6.5萬)</span>
+              <span class="text-amber-600 font-medium">🏛️️ 一般私立/外州公立 (約 $6.5萬)</span>
               <span class="text-rose-600 font-medium">🎓 常春藤/頂尖私立 ($9萬+)</span>
             </div>
           </div>
-
           <div class="md:col-span-2">
             <div class="flex justify-between items-center mb-1">
               <label class="text-sm font-medium text-slate-700">年化投資回報率 (%)</label>
@@ -95,20 +93,17 @@
         </div>
       </section>
 
-      <!-- 統計摘要卡片 -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
           <div class="text-xs text-slate-500 font-medium">18 歲入學時累積總資產</div>
           <div id="res529College" class="text-2xl font-extrabold text-slate-800 mt-2">$224,809</div>
           <div class="text-xs text-slate-400 mt-1">大學入學前增長</div>
         </div>
-
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
           <div class="text-xs text-slate-500 font-medium">22 歲大學畢業時餘額</div>
           <div id="res529Grad" class="text-2xl font-extrabold text-blue-600 mt-2">$78,150</div>
           <div id="txt529GradNote" class="text-xs text-slate-400 mt-1">26～30 歲分 5 年轉 $7k (共$35k)</div>
         </div>
-
         <div class="bg-white p-5 rounded-xl border border-indigo-100 shadow-sm text-center bg-gradient-to-b from-white to-indigo-50/40">
           <div id="txt529GrandchildLabel" class="text-xs text-indigo-600 font-semibold">轉完 IRA 後孫輩金庫</div>
           <div id="res529Grandchild" class="text-2xl font-extrabold text-emerald-600 mt-2">$97,180</div>
@@ -116,10 +111,9 @@
         </div>
       </section>
 
-      <!-- 圖表 -->
       <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="font-bold text-slate-900">📈 529 帳戶完整生命週期軌跡 (嚴謹分 5 年扣 IRA)</h3>
+          <h3 class="font-bold text-slate-900">📈 529 帳戶完整生命週期軌跡 (分 5 年轉 IRA)</h3>
           <span class="text-xs text-slate-400">單位: USD</span>
         </div>
         <div class="relative h-72 md:h-80 w-full">
@@ -130,22 +124,18 @@
 
     <!-- ==================== TAB 2: HSA 隱藏退休金模組 ==================== -->
     <div id="tab-hsa" class="tab-content hidden space-y-6">
-      
-      <!-- HSA 核心觀念解析 -->
       <section class="bg-gradient-to-r from-emerald-900 to-teal-900 text-white p-6 rounded-2xl shadow-sm">
         <span class="bg-emerald-700 text-emerald-100 text-xs px-2.5 py-1 rounded-full font-semibold">全美唯一三全免神卡</span>
         <h2 class="text-xl md:text-2xl font-bold mt-2">HSA 不只是醫藥費卡，更是終極免稅投資金庫</h2>
         <p class="text-emerald-100 text-xs md:text-sm mt-2 leading-relaxed">
-          <strong>收據自費留存法（Shoebox Strategy）</strong>：平時看醫生自己刷信用卡付掉並「終身保留發票/收據」，HSA 裡面的錢全額買入 S&P 500。幾十年免稅複利成長到 65 歲，隨時拿舊收據免稅報銷，65 歲後任意領出更是等同於 Traditional IRA！
+          <strong>收據自費留存法（Shoebox Strategy）</strong>：平時自費看診並永久保留發票，HSA 裡面的資金 100% 投資 S&P 500。幾十年免稅複利滾至 65 歲，隨時拿歷史收據免稅報銷；65 歲後若任意領出等同於 Traditional IRA！
         </p>
       </section>
 
-      <!-- 控制器卡片 -->
       <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
           <span>⚙️</span> HSA 複利試算設定
         </h2>
-
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <div class="flex justify-between items-center mb-1">
@@ -155,7 +145,6 @@
             <input type="range" id="inputHsaAge" min="20" max="60" step="1" value="41" class="w-full accent-emerald-600 cursor-pointer">
             <p class="text-xs text-slate-400 mt-1">計算複利至 65 歲（共複利 <span id="txtHsaYears" class="font-semibold text-slate-600">24</span> 年）</p>
           </div>
-
           <div>
             <div class="flex justify-between items-center mb-1">
               <label class="text-sm font-medium text-slate-700">每年投入額 (USD)</label>
@@ -167,7 +156,6 @@
               <span class="text-emerald-600 font-semibold">家庭上限 (~$8,550)</span>
             </div>
           </div>
-
           <div class="md:col-span-2">
             <div class="flex justify-between items-center mb-1">
               <label class="text-sm font-medium text-slate-700">投資標的年化回報率 (%)</label>
@@ -183,28 +171,24 @@
         </div>
       </section>
 
-      <!-- 統計對比卡片 -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
           <div class="text-xs text-slate-500 font-medium">累積總存入本金</div>
           <div id="resHsaPrincipal" class="text-2xl font-extrabold text-slate-800 mt-2">$205,200</div>
-          <div class="text-xs text-slate-400 mt-1">本金全額抵扣當年度薪資所得</div>
+          <div class="text-xs text-slate-400 mt-1">本金全額抵扣當年度所得</div>
         </div>
-
         <div class="bg-white p-5 rounded-xl border border-emerald-100 shadow-sm text-center bg-gradient-to-b from-white to-emerald-50/40">
           <div class="text-xs text-emerald-700 font-semibold">65 歲 HSA 帳戶終值 (三全免)</div>
           <div id="resHsaTotal" class="text-2xl font-extrabold text-emerald-600 mt-2">$626,890</div>
-          <div class="text-xs text-emerald-600 mt-1">一毛所得稅與資本利得稅都不用繳</div>
+          <div class="text-xs text-emerald-600 mt-1">零所得稅、零資本利得稅</div>
         </div>
-
         <div class="bg-white p-5 rounded-xl border border-rose-100 shadow-sm text-center bg-gradient-to-b from-white to-rose-50/30">
-          <div class="text-xs text-rose-600 font-semibold">若放在一般券商被吃掉的稅</div>
+          <div class="text-xs text-rose-600 font-semibold">一般帳戶被吃掉的稅</div>
           <div id="resHsaTaxSaved" class="text-2xl font-extrabold text-rose-600 mt-2">$94,000+</div>
-          <div class="text-xs text-slate-400 mt-1">省下的資本利得與股利稅金</div>
+          <div class="text-xs text-slate-400 mt-1">省下的資本利得與股利稅負</div>
         </div>
       </section>
 
-      <!-- HSA 成長走勢圖 -->
       <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <div class="flex justify-between items-center mb-4">
           <h3 class="font-bold text-slate-900">📈 HSA 終身免稅複利滾存軌跡 (至 65 歲)</h3>
@@ -216,7 +200,153 @@
       </section>
     </div>
 
-    <!-- ==================== TAB 3: 避稅水流模型 (The Waterfall) ==================== -->
+    <!-- ==================== TAB 3: Social Security & 401(k) 退休模組 ==================== -->
+    <div id="tab-retirement" class="tab-content hidden space-y-6">
+      
+      <!-- 控制器卡片 -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <h2 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+          <span>⚙️</span> 社安金與 401(k) 參數設定
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- 工作起訖年齡 -->
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">赴美/開始工作年齡</label>
+              <span id="txtWorkStartAge" class="font-bold text-indigo-600">38 歲</span>
+            </div>
+            <input type="range" id="inputWorkStartAge" min="22" max="50" step="1" value="38" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">影響社安金 35 年最高薪資（Top 35 Years）計算</p>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">預計退休年齡</label>
+              <span id="txtRetireAge" class="font-bold text-indigo-600">65 歲</span>
+            </div>
+            <input type="range" id="inputRetireAge" min="55" max="70" step="1" value="65" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">在美實際累計工作年資：<span id="txtTotalWorkYears" class="font-bold text-indigo-600">27</span> 年</p>
+          </div>
+
+          <!-- 當前起薪與成長率 -->
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">目前/開始年薪 (USD)</label>
+              <span id="txtCurrentSalary" class="font-bold text-indigo-600">$180,000</span>
+            </div>
+            <input type="range" id="inputCurrentSalary" min="60000" max="350000" step="5000" value="180000" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">社安金上限約 $17.6萬/年；超出部分仍計入 401(k)</p>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">年薪平均成長率 (%)</label>
+              <span id="txtSalaryGrowth" class="font-bold text-indigo-600">5.0%</span>
+            </div>
+            <input type="range" id="inputSalaryGrowth" min="1.0" max="8.0" step="0.5" value="5.0" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">預估退休前最後一年年薪：<span id="txtFinalSalary" class="font-bold text-slate-700">$0</span></p>
+          </div>
+
+          <!-- 401(k) 投入率與雇主 Match -->
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">401(k) 員工自選提存比例 (%)</label>
+              <span id="txtContribRate" class="font-bold text-indigo-600">10%</span>
+            </div>
+            <input type="range" id="inputContribRate" min="3" max="25" step="1" value="10" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-xs text-slate-400 mt-1">受限於 IRS 年度員工上限 $23,500（自動截斷）</p>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">公司 401(k) Match 等級</label>
+              <span id="txtMatchLevel" class="font-bold text-indigo-600">良好 (5% Match)</span>
+            </div>
+            <input type="range" id="inputMatchLevel" min="1" max="3" step="1" value="2" class="w-full accent-indigo-600 cursor-pointer">
+            <div class="flex justify-between text-xs text-slate-400 mt-1">
+              <span>一般 (3.5%)</span>
+              <span class="text-indigo-600 font-semibold">良好 (5.0%)</span>
+              <span>頂尖科技 (6.0%+)</span>
+            </div>
+          </div>
+
+          <!-- 社安金請領年齡與 401(k) 投資報酬率 -->
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">夫妻社安金提領年齡</label>
+              <span id="txtClaimAge" class="font-bold text-indigo-600">67 歲 (法定正常退休)</span>
+            </div>
+            <input type="range" id="inputClaimAge" min="62" max="70" step="1" value="67" class="w-full accent-indigo-600 cursor-pointer">
+            <div class="flex justify-between text-xs text-slate-400 mt-1">
+              <span>62歲提早(-30%)</span>
+              <span class="text-indigo-600 font-semibold">67歲正常(100%+配偶50%)</span>
+              <span>70歲延後(+24%)</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="text-sm font-medium text-slate-700">401(k) 投資年化回報率 (%)</label>
+              <span id="txtRetireReturn" class="font-bold text-indigo-600">6.0%</span>
+            </div>
+            <input type="range" id="inputRetireReturn" min="4.0" max="8.0" step="2.0" value="6.0" class="w-full accent-indigo-600 cursor-pointer">
+            <div class="flex justify-between text-xs text-slate-400 mt-1">
+              <span>保守 (4%)</span>
+              <span class="text-indigo-600 font-semibold">中庸平衡 (6%)</span>
+              <span>積極股票 (8%)</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- 退休結果統計卡片 -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-medium">退休時 401(k) 累積總餘額</div>
+          <div id="res401kTotal" class="text-2xl font-extrabold text-blue-600 mt-2">$1,250,000</div>
+          <div class="text-xs text-slate-400 mt-1">自提＋公司Match＋複利</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm text-center">
+          <div class="text-xs text-slate-500 font-medium">401(k) 每年安全提領 (4%)</div>
+          <div id="res401kAnnual" class="text-2xl font-extrabold text-slate-800 mt-2">$50,000 / 年</div>
+          <div class="text-xs text-slate-400 mt-1">依 4% Rule 終身不提竭</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-indigo-100 shadow-sm text-center bg-gradient-to-b from-white to-indigo-50/40">
+          <div class="text-xs text-indigo-600 font-semibold">夫妻 Social Security 合計</div>
+          <div id="resSsaAnnual" class="text-2xl font-extrabold text-indigo-600 mt-2">$48,500 / 年</div>
+          <div class="text-xs text-slate-400 mt-1">含無工作配偶 50% 福利</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-emerald-100 shadow-sm text-center bg-gradient-to-b from-white to-emerald-50/50">
+          <div class="text-xs text-emerald-700 font-semibold">退休總替代收入 (替代率)</div>
+          <div id="resTotalRetireIncome" class="text-2xl font-extrabold text-emerald-600 mt-2">$98,500 / 年</div>
+          <div id="resReplacementRatio" class="text-xs text-emerald-600 font-bold mt-1">所得替代率: 68%</div>
+        </div>
+
+      </section>
+
+      <!-- 401(k) 成長曲線圖 -->
+      <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-bold text-slate-900">📈 401(k) 退休資產累積軌跡與本金複利分解</h3>
+          <span class="text-xs text-slate-400">單位: USD</span>
+        </div>
+        <div class="relative h-72 md:h-80 w-full">
+          <canvas id="chart401k"></canvas>
+        </div>
+        <p class="text-xs text-slate-400 mt-4 leading-relaxed">
+          * 替代收入說明：退休年度總替代收入 = 401(k) 帳戶每年以 4% 安全提領額 + 夫妻雙人社安退休金（Social Security，主申請人+配偶無工作50%福利）。替代率以「總替代收入 ÷ 退休前最終薪資」計算，國際標準達 60%~75% 即可維持原有生活水準。
+        </p>
+      </section>
+    </div>
+
+    <!-- ==================== TAB 4: 避稅水流模型 (The Waterfall) ==================== -->
     <div id="tab-waterfall" class="tab-content hidden space-y-6">
       <section class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
         <h2 class="text-xl font-bold text-slate-900 mb-2">🌊 美國移民家庭入金優先級（The Waterfall Model）</h2>
@@ -282,7 +412,7 @@
       <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-6 space-y-3">
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">暱稱 / 稱呼</label>
-          <input type="text" id="commentAuthor" placeholder="例如：德州老劉、加州轉德州 Kevin" class="w-full text-sm px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <input type="text" id="commentAuthor" placeholder="例如：德州達拉斯陳爸、Austin 新移民" class="w-full text-sm px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
         </div>
         <div>
           <label class="block text-xs font-semibold text-slate-600 mb-1">留言內容</label>
@@ -322,7 +452,7 @@
   <script>
     const fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
 
-    // Tab 切換控制
+    // Tab 切換
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => {
         el.classList.add('hidden');
@@ -338,12 +468,12 @@
       const activeBtn = document.getElementById('btn-' + tabId.replace('tab-', ''));
       activeBtn.className = 'tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap';
 
-      // 切換後重繪圖表以適應尺寸
       if (tabId === 'tab-529' && chart529) chart529.resize();
       if (tabId === 'tab-hsa' && chartHsa) chartHsa.resize();
+      if (tabId === 'tab-retirement' && chart401k) chart401k.resize();
     }
 
-    // ---------------- 529 計算模組 ----------------
+    // ---------------- 529 計算 ----------------
     const el529Initial = document.getElementById('input529Initial');
     const el529Age = document.getElementById('input529Age');
     const el529Tuition = document.getElementById('input529Tuition');
@@ -452,7 +582,7 @@
       });
     }
 
-    // ---------------- HSA 計算模組 ----------------
+    // ---------------- HSA 計算 ----------------
     const elHsaAge = document.getElementById('inputHsaAge');
     const elHsaContrib = document.getElementById('inputHsaContrib');
     const elHsaRate = document.getElementById('inputHsaRate');
@@ -472,8 +602,8 @@
       const age = parseInt(elHsaAge.value);
       const contrib = parseFloat(elHsaContrib.value);
       const rate = parseFloat(elHsaRate.value) / 100;
-
       const years = Math.max(1, 65 - age);
+
       txtHsaAge.innerText = `${age} 歲`;
       txtHsaContrib.innerText = `${fmt.format(contrib)} / 年`;
       txtHsaRate.innerText = `${(rate * 100).toFixed(1)}%`;
@@ -499,14 +629,12 @@
       resHsaPrincipal.innerText = fmt.format(currentPrincipal);
       resHsaTotal.innerText = fmt.format(currentHsa);
 
-      // 假設一般券商戶在資本利得與股利綜合稅負下每年摩擦 1.5%
       const taxableRate = Math.max(0, rate - 0.015);
       let taxableVal = 0;
       for (let i = 0; i < years; i++) {
         taxableVal = (taxableVal + contrib) * (1 + taxableRate);
       }
-      const taxSaved = Math.max(0, currentHsa - taxableVal);
-      resHsaTaxSaved.innerText = fmt.format(taxSaved);
+      resHsaTaxSaved.innerText = fmt.format(Math.max(0, currentHsa - taxableVal));
 
       renderHsaChart(labels, hsaData, principalData);
     }
@@ -547,10 +675,207 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: {
-            legend: { position: 'top' },
-            tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${fmt.format(ctx.raw)}` } }
-          },
+          plugins: { legend: { position: 'top' } },
+          scales: {
+            y: { ticks: { callback: v => '$' + (v / 1000) + 'k' }, grid: { color: '#f1f5f9' } },
+            x: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // ---------------- Social Security & 401(k) 計算 ----------------
+    const elWorkStartAge = document.getElementById('inputWorkStartAge');
+    const elRetireAge = document.getElementById('inputRetireAge');
+    const elCurrentSalary = document.getElementById('inputCurrentSalary');
+    const elSalaryGrowth = document.getElementById('inputSalaryGrowth');
+    const elContribRate = document.getElementById('inputContribRate');
+    const elMatchLevel = document.getElementById('inputMatchLevel');
+    const elClaimAge = document.getElementById('inputClaimAge');
+    const elRetireReturn = document.getElementById('inputRetireReturn');
+
+    const txtWorkStartAge = document.getElementById('txtWorkStartAge');
+    const txtRetireAge = document.getElementById('txtRetireAge');
+    const txtTotalWorkYears = document.getElementById('txtTotalWorkYears');
+    const txtCurrentSalary = document.getElementById('txtCurrentSalary');
+    const txtSalaryGrowth = document.getElementById('txtSalaryGrowth');
+    const txtFinalSalary = document.getElementById('txtFinalSalary');
+    const txtContribRate = document.getElementById('txtContribRate');
+    const txtMatchLevel = document.getElementById('txtMatchLevel');
+    const txtClaimAge = document.getElementById('txtClaimAge');
+    const txtRetireReturn = document.getElementById('txtRetireReturn');
+
+    const res401kTotal = document.getElementById('res401kTotal');
+    const res401kAnnual = document.getElementById('res401kAnnual');
+    const resSsaAnnual = document.getElementById('resSsaAnnual');
+    const resTotalRetireIncome = document.getElementById('resTotalRetireIncome');
+    const resReplacementRatio = document.getElementById('resReplacementRatio');
+
+    let chart401k = null;
+
+    function calcRetirement() {
+      let startAge = parseInt(elWorkStartAge.value);
+      let retireAge = parseInt(elRetireAge.value);
+      if (retireAge <= startAge) {
+        retireAge = startAge + 1;
+        elRetireAge.value = retireAge;
+      }
+
+      const initSalary = parseFloat(elCurrentSalary.value);
+      const growth = parseFloat(elSalaryGrowth.value) / 100;
+      const contribPct = parseFloat(elContribRate.value) / 100;
+      const matchIdx = parseInt(elMatchLevel.value);
+      const matchRate = matchIdx === 1 ? 0.035 : (matchIdx === 2 ? 0.05 : 0.06);
+      const matchLabels = ["一般 (3.5% Match)", "良好 (5.0% Match)", "頂尖科技 (6.0% Match)"];
+      const claimAge = parseInt(elClaimAge.value);
+      const r = parseFloat(elRetireReturn.value) / 100;
+
+      const workYears = retireAge - startAge;
+
+      txtWorkStartAge.innerText = `${startAge} 歲`;
+      txtRetireAge.innerText = `${retireAge} 歲`;
+      txtTotalWorkYears.innerText = workYears;
+      txtCurrentSalary.innerText = fmt.format(initSalary);
+      txtSalaryGrowth.innerText = `${(growth * 100).toFixed(1)}%`;
+      txtContribRate.innerText = `${(contribPct * 100).toFixed(0)}%`;
+      txtMatchLevel.innerText = matchLabels[matchIdx - 1];
+
+      let claimDesc = `${claimAge} 歲`;
+      if (claimAge === 67) claimDesc += " (正常退休 100%+50%)";
+      else if (claimAge < 67) claimDesc += ` (提早扣減至約 ${Math.round(70 + (claimAge-62)*6)}%)`;
+      else claimDesc += ` (延後獎勵至約 ${Math.round(100 + (claimAge-67)*8)}%)`;
+      txtClaimAge.innerText = claimDesc;
+      txtRetireReturn.innerText = `${(r * 100).toFixed(0)}% (${r <= 0.04 ? '保守' : (r <= 0.06 ? '中庸' : '積極')})`;
+
+      // 401(k) 逐年滾存與 SSA 薪資歷史紀錄
+      const ssaWageCap = 176100; // SSA 課稅上限
+      const ssaEarnings = [];
+
+      const labels = [];
+      const totalData = [];
+      const contribOnlyData = [];
+
+      let bal = 0;
+      let totalContribSum = 0;
+      let currSalary = initSalary;
+
+      for (let age = startAge; age <= retireAge; age++) {
+        labels.push(`${age} 歲`);
+
+        if (age > startAge) {
+          // 401k 員工自提 (上限 $23,500) + 公司 Match
+          const employeeContrib = Math.min(23500, currSalary * contribPct);
+          const employerContrib = currSalary * matchRate;
+          const annual401k = employeeContrib + employerContrib;
+
+          bal = (bal + annual401k) * (1 + r);
+          totalContribSum += annual401k;
+
+          // SSA 薪資採計 (受限於 cap)
+          ssaEarnings.push(Math.min(ssaWageCap, currSalary));
+
+          // 薪資調升
+          currSalary = currSalary * (1 + growth);
+        } else {
+          ssaEarnings.push(Math.min(ssaWageCap, currSalary));
+        }
+
+        totalData.push(Math.round(bal));
+        contribOnlyData.push(Math.round(totalContribSum));
+      }
+
+      txtFinalSalary.innerText = fmt.format(currSalary);
+
+      // --- SSA PIA 精算 (Top 35 Years & AIME) ---
+      while (ssaEarnings.length < 35) {
+        ssaEarnings.push(0); // 不足 35 年補 0
+      }
+      ssaEarnings.sort((a, b) => b - a);
+      const top35 = ssaEarnings.slice(0, 35);
+      const sumTop35 = top35.reduce((a, b) => a + b, 0);
+      const aime = sumTop35 / (35 * 12);
+
+      // 拐點計算 (90% / 32% / 15%)
+      let pia = 0;
+      if (aime <= 1226) {
+        pia = aime * 0.90;
+      } else if (aime <= 7391) {
+        pia = (1226 * 0.90) + (aime - 1226) * 0.32;
+      } else {
+        pia = (1226 * 0.90) + (7391 - 1226) * 0.32 + (aime - 7391) * 0.15;
+      }
+
+      // 提領年齡調整 (Worker + Non-working Spouse)
+      let workerRatio = 1.0;
+      let spouseRatio = 0.5;
+
+      if (claimAge < 67) {
+        const earlyMonths = (67 - claimAge) * 12;
+        const workerCut = Math.min(36, earlyMonths) * (5/9 * 0.01) + Math.max(0, earlyMonths - 36) * (5/12 * 0.01);
+        workerRatio = 1.0 - workerCut;
+        const spouseCut = Math.min(36, earlyMonths) * (25/36 * 0.01) + Math.max(0, earlyMonths - 36) * (5/12 * 0.01);
+        spouseRatio = 0.5 * (1.0 - spouseCut);
+      } else if (claimAge > 67) {
+        workerRatio = 1.0 + (claimAge - 67) * 0.08;
+        spouseRatio = 0.5; // 配偶福利不因延後而增加
+      }
+
+      const workerMonthly = pia * workerRatio;
+      const spouseMonthly = pia * spouseRatio;
+      const ssaAnnualTotal = (workerMonthly + spouseMonthly) * 12;
+
+      // 401(k) 4% Rule 安全提領
+      const safeWithdrawal = bal * 0.04;
+      const totalRetireIncome = safeWithdrawal + ssaAnnualTotal;
+      const replacementRatio = (totalRetireIncome / currSalary) * 100;
+
+      // 更新卡片
+      res401kTotal.innerText = fmt.format(bal);
+      res401kAnnual.innerText = `${fmt.format(safeWithdrawal)} / 年`;
+      resSsaAnnual.innerText = `${fmt.format(ssaAnnualTotal)} / 年`;
+      resTotalRetireIncome.innerText = `${fmt.format(totalRetireIncome)} / 年`;
+      resReplacementRatio.innerText = `所得替代率: ${replacementRatio.toFixed(0)}% (以最終年薪計)`;
+
+      render401kChart(labels, totalData, contribOnlyData);
+    }
+
+    function render401kChart(labels, totalData, contribOnlyData) {
+      if (chart401k) {
+        chart401k.data.labels = labels;
+        chart401k.data.datasets[0].data = totalData;
+        chart401k.data.datasets[1].data = contribOnlyData;
+        chart401k.update();
+        return;
+      }
+      const ctx = document.getElementById('chart401k').getContext('2d');
+      chart401k = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '401(k) 累積總淨值',
+              data: totalData,
+              borderColor: '#2563eb',
+              backgroundColor: 'rgba(37, 99, 235, 0.08)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.25
+            },
+            {
+              label: '累計存入本金 (含雇主Match)',
+              data: contribOnlyData,
+              borderColor: '#94a3b8',
+              borderDash: [5, 5],
+              borderWidth: 2,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: 'top' } },
           scales: {
             y: { ticks: { callback: v => '$' + (v / 1000) + 'k' }, grid: { color: '#f1f5f9' } },
             x: { grid: { display: false } }
@@ -584,13 +909,15 @@
       alert('留言成功發布！');
     }
 
-    // 監聽所有滑桿事件
+    // 監聽所有滑桿
     [el529Initial, el529Age, el529Tuition, el529Rate].forEach(el => el.addEventListener('input', calc529));
     [elHsaAge, elHsaContrib, elHsaRate].forEach(el => el.addEventListener('input', calcHsa));
+    [elWorkStartAge, elRetireAge, elCurrentSalary, elSalaryGrowth, elContribRate, elMatchLevel, elClaimAge, elRetireReturn].forEach(el => el.addEventListener('input', calcRetirement));
 
     // 頁面初始化
     calc529();
     calcHsa();
+    calcRetirement();
   </script>
 </body>
 </html>
